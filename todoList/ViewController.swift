@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  todoList
 //
-//  Created by 曾子庭 on 2022/4/7.
+//  Created by roger on 2022/4/7.
 //
 
 import UIKit
@@ -11,16 +11,6 @@ import SnapKit
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     //MARK: UI
-    let navBar:UINavigationBar = {
-        let myNavBar = UINavigationBar()
-        myNavBar.backgroundColor = .brown
-        let navTitle = UINavigationItem(title: "ToDo list")
-        let newButton = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: #selector(newList))
-        navTitle.rightBarButtonItem = newButton
-        myNavBar.setItems([navTitle], animated: false)
-        return myNavBar
-    }()
-    
     let tableView:UITableView = {
         let myTableView = UITableView()
         myTableView.separatorStyle = .singleLine
@@ -37,6 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.backgroundColor = .white
         setupUI()
         
+        //不太知道這是什麼
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
@@ -44,21 +35,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func setupUI(){
-        self.view.addSubview(navBar)
+        
+        //navbar object
+        navigationItem.title = "提醒事項"
+        navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newList))
+        
         self.view.addSubview(tableView)
         
-        navBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.width.equalToSuperview()
-        }
         tableView.snp.makeConstraints { make in
             make.height.width.equalToSuperview()
-            make.top.equalTo(navBar.snp.bottom)
         }
     }
     
     @objc func newList(){
         showAlertController(title: "新增", message: "請輸入要做的事項")
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: true)
     }
     
     //showcontroller
@@ -78,8 +74,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         present(alertController, animated: true, completion: nil)
     }
     
-    
     //MARK: UITable func
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
@@ -88,6 +84,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = "\(data[indexPath.row])"
         return cell
+    }
+    
+    //此方法是刪除tableview中的cell功能
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch editingStyle{
+            case UITableViewCell.EditingStyle.delete:
+            data.remove(at: indexPath.row)
+            tableView.reloadData()
+            saveData()
+        default:
+            break
+        }
     }
     
     //MARK: save data
