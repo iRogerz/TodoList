@@ -20,44 +20,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var data = [String]()
     
-    
     //MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+//        view.backgroundColor = .white
         setupUI()
-        
-        //不太知道這是什麼
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.dataSource = self
-        tableView.delegate = self
         loadData()
     }
     
+    //MARK: setupView
     func setupUI(){
-        
-        //navbar object
+        //nav
         navigationItem.title = "提醒事項"
         navigationItem.leftBarButtonItem = editButtonItem
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newList))
         
         self.view.addSubview(tableView)
-        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.snp.makeConstraints { make in
             make.height.width.equalToSuperview()
         }
+    }
+    
+    //native edit func
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: true)
     }
     
     @objc func newList(){
         showAlertController(title: "新增", message: "請輸入要做的事項")
     }
     
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        tableView.setEditing(editing, animated: true)
-    }
-    
-    //showcontroller
+    //showAlert func
     func showAlertController(title: String, message: String){
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "確認", style: .default) { _ in
