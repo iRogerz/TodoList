@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  todoList
 //
-//  Created by 曾子庭 on 2022/4/7.
+//  Created by roger on 2022/4/7.
 //
 
 import UIKit
@@ -21,6 +21,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 window?.windowScene = windowScene
                 window?.rootViewController = ViewController()
                 window?.makeKeyAndVisible()
+        let controller = ViewController()
+        let navController = UINavigationController(rootViewController: controller)
+        window?.rootViewController = navController
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
