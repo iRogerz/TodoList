@@ -8,8 +8,7 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+class ViewController: UIViewController {
     //MARK: UI
     let tableView:UITableView = {
         let myTableView = UITableView()
@@ -23,7 +22,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.backgroundColor = .white
+        view = tableView
         setupUI()
         loadData()
     }
@@ -34,16 +33,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         navigationItem.title = "提醒事項"
         navigationItem.leftBarButtonItem = editButtonItem
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newList))
-        
-        self.view.addSubview(tableView)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
-        tableView.delegate = self
-        tableView.snp.makeConstraints { make in
-            make.height.width.equalToSuperview()
-        }
     }
-    
     //native edit func
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
@@ -70,19 +62,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
-    //MARK: UITable func
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "\(data[indexPath.row])"
-        return cell
-    }
-    
+
     //此方法是刪除tableview中的cell功能
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle{
@@ -94,7 +74,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             break
         }
     }
-    
     //MARK: save data
     func saveData(){
         UserDefaults.standard.set(data, forKey: "data")
@@ -106,3 +85,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
 }
 
+
+extension ViewController:UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = "\(data[indexPath.row])"
+        return cell
+    }
+}
