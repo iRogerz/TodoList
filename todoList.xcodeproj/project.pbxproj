@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		359951D928124A7B0074A418 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359951D828124A7B0074A418 /* UIViewControllerExtensions.swift */; };
+		359951DB28124F760074A418 /* TOdoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359951DA28124F760074A418 /* TOdoList.swift */; };
 		35BCE2AE27FE82A000CD081E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BCE2AD27FE82A000CD081E /* AppDelegate.swift */; };
 		35BCE2B027FE82A000CD081E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BCE2AF27FE82A000CD081E /* SceneDelegate.swift */; };
 		35BCE2B227FE82A000CD081E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BCE2B127FE82A000CD081E /* ViewController.swift */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		359951D828124A7B0074A418 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
+		359951DA28124F760074A418 /* TOdoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOdoList.swift; sourceTree = "<group>"; };
 		35BCE2AA27FE82A000CD081E /* todoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35BCE2AD27FE82A000CD081E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		35BCE2AF27FE82A000CD081E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 				35BCE2B627FE82A100CD081E /* Assets.xcassets */,
 				35BCE2B827FE82A100CD081E /* LaunchScreen.storyboard */,
 				35BCE2BB27FE82A100CD081E /* Info.plist */,
+				359951D828124A7B0074A418 /* UIViewControllerExtensions.swift */,
+				359951DA28124F760074A418 /* TOdoList.swift */,
 			);
 			path = todoList;
 			sourceTree = "<group>";
@@ -142,8 +148,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				359951D928124A7B0074A418 /* UIViewControllerExtensions.swift in Sources */,
 				35BCE2B227FE82A000CD081E /* ViewController.swift in Sources */,
 				35BCE2AE27FE82A000CD081E /* AppDelegate.swift in Sources */,
+				359951DB28124F760074A418 /* TOdoList.swift in Sources */,
 				35BCE2B027FE82A000CD081E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

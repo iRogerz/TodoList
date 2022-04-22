@@ -8,92 +8,81 @@
 import UIKit
 import SnapKit
 
+// Massive View Controller
+
+// Access Control
+
 class ViewController: UIViewController {
-    //MARK: UI
-    let tableView:UITableView = {
-        let myTableView = UITableView()
-        myTableView.separatorStyle = .singleLine
-        myTableView.allowsSelection = true
-        return myTableView
+    
+    var todoList = TodoList() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    //MARK: - UI
+    private let tableView:UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .singleLine
+        tableView.allowsSelection = true
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return tableView
     }()
     
-    var data = [String]()
     
-    //MARK: lifecycle
+    //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view = tableView
         setupUI()
-        loadData()
+        setupNavigation()
     }
     
-    //MARK: setupView
-    func setupUI(){
-        //nav
+    private func setupNavigation(){
         navigationItem.title = "提醒事項"
         navigationItem.leftBarButtonItem = editButtonItem
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newList))
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    }
+    
+    //MARK: - setupView
+    private func setupUI(){
+
         tableView.dataSource = self
     }
-    //native edit func
+    
+    //native editButton func
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.setEditing(editing, animated: true)
     }
     
-    @objc func newList(){
-        showAlertController(title: "新增", message: "請輸入要做的事項")
-    }
-    
-    //showAlert func
-    func showAlertController(title: String, message: String){
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "確認", style: .default) { _ in
-            if let textField = alertController.textFields,
-               let inputText = textField[0].text{
-                self.data.append(inputText)
-                self.saveData()
-                self.tableView.reloadData()
-                print(inputText)
-            }
-        }
-        alertController.addTextField(configurationHandler: nil)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
-    }
-
-    //此方法是刪除tableview中的cell功能
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        switch editingStyle{
-            case UITableViewCell.EditingStyle.delete:
-            data.remove(at: indexPath.row)
-            tableView.reloadData()
-            saveData()
-        default:
-            break
+    @objc private func newList(){
+        // ARC weak unowned
+        showTextFieldAlert(title: "新增", message: "請輸入要做的事項") {text in
+            self.todoList.add(text: text)
         }
     }
-    //MARK: save data
-    func saveData(){
-        UserDefaults.standard.set(data, forKey: "data")
-    }
-    
-    func loadData(){
-        data = UserDefaults.standard.stringArray(forKey: "data") ?? []
-    }
-    
 }
 
 
-extension ViewController:UITableViewDataSource{
+//MARK: - UITableViewDataSource
+extension ViewController:UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return todoList.strings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "\(data[indexPath.row])"
+        let string = todoList.strings[indexPath.row]
+        cell.textLabel?.text = string
         return cell
+    }
+    
+    //此方法是刪除tableview中的cell功能
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            todoList.remove(indexPath.row)
+        }
     }
 }
